@@ -1,0 +1,26 @@
+<?php
+
+namespace Shared\Command;
+
+use Order\Domain\Order;
+use Shared\Clock;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'app:test')]
+class TestCommand extends Command
+{
+    public function __construct(private readonly Clock $clock, private readonly Order $order)
+    {
+        parent::__construct();
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $output->writeln('Whoa! '.$this->clock->current()->format('Y-m-d h:i:s'));
+        $output->writeln('Whoa2! '.$this->order->time()->format('Y-m-d h:i:s'));
+        return Command::SUCCESS;
+    }
+}
